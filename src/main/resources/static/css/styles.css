@@ -1,0 +1,216 @@
+/* ==========================================
+   VARIABLES Y RESET BÁSICO (CSS PURO)
+   ========================================== */
+:root {
+    --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --bg-color: #f8fafc;
+    --card-bg: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+
+    /* Colores para las acciones */
+    --warning-color: #d97706;
+    --warning-bg: #fef3c7;
+    --danger-color: #dc2626;
+    --danger-bg: #fee2e2;
+
+    --radius: 8px;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    padding: 2rem 1rem;
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ==========================================
+   ENCABEZADO
+   ========================================== */
+.header {
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 1rem;
+}
+
+.header h1 {
+    font-size: 2.25rem;
+    color: var(--text-main);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+}
+
+.header .subtitle {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+/* ==========================================
+   SECCIÓN PRINCIPAL Y ACCIONES
+   ========================================== */
+.content-card {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.toolbar h2 {
+    font-size: 1.5rem;
+    color: var(--text-main);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    font-size: 0.9rem;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+/* ==========================================
+   TABLA RESPONSIVA
+   ========================================== */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+.data-table th,
+.data-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.data-table th {
+    background-color: #f1f5f9;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.data-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.password-mask {
+    font-family: monospace;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+}
+
+.badge-role {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background-color: #e0e7ff;
+    color: #3730a3;
+}
+
+/* ==========================================
+   BOTONES DE ACCIÓN E ÍCONOS (SVG INLINE)
+   ========================================== */
+.actions-cell {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.btn-icon {
+    padding: 0.4rem 0.6rem;
+    border-radius: calc(var(--radius) - 2px);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+}
+
+.btn-edit {
+    color: var(--warning-color);
+    background-color: var(--warning-bg);
+    border-color: #fcd34d;
+}
+
+.btn-edit:hover {
+    background-color: #fde68a;
+}
+
+.btn-delete {
+    color: var(--danger-color);
+    background-color: var(--danger-bg);
+    border-color: #fca5a5;
+}
+
+.btn-delete:hover {
+    background-color: #fecaca;
+}
+
+.icon {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2;
+    stroke: currentColor;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
