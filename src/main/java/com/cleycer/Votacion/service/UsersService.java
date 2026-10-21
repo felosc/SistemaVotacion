@@ -1,7 +1,7 @@
 package com.cleycer.Votacion.service;
 
 import com.cleycer.Votacion.model.Users;
-import com.cleycer.Votacion.repository.ItfUsersRespository;
+import com.cleycer.Votacion.repository.ItfUsersRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,9 +9,9 @@ import java.util.List;
 @Service
 public class UsersService implements ItfUsersService {
 
-    private final ItfUsersRespository userRepo;
+    private final ItfUsersRepository userRepo;
 
-    public UsersService(ItfUsersRespository userRepo) {
+    public UsersService(ItfUsersRepository userRepo) {
         this.userRepo = userRepo;
     }
 
