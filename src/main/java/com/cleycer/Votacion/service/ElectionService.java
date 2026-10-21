@@ -35,7 +35,7 @@ public class ElectionService implements ItfElectionService{
     @Override
     public Election createElection(Election ElectionData) {
 
-        long codUserCreate = ElectionData.getUserCreate();
+        Long codUserCreate = ElectionData.getUserCreate();
         Users userCreateElection = userRepo.searchUser(codUserCreate);
         ElectionData.setUserCreate(userCreateElection);
         if (ElectionData==null)
