@@ -1,6 +1,5 @@
 package com.cleycer.Votacion.service;
 
-
 import com.cleycer.Votacion.model.Candidate;
 import com.cleycer.Votacion.model.Election;
 import com.cleycer.Votacion.repository.ItfCandidateRepository;
@@ -33,15 +32,10 @@ public class CandidateService implements ItfCandidateService {
     @Override
     public Candidate createCandidate(Candidate candidateData) {
         Long codElectionCandidate = candidateData.getElectionCandidate();
-        Election verifyElection = ElectionRepo.getReferenceById(codElectionCandidate);
-        candidateData.setElectionCandidate(verifyElection);
-        if (candidateData==null)
-        {
-            return null;
-        }
+        Election codeElection = ElectionRepo.getReferenceById(codElectionCandidate);
+        candidateData.setElectionCandidate(codeElection);
         boolean valido = this.validateDataCandidate(candidateData);
-        if (valido==false)
-        {
+        if (valido == false) {
             return null;
         }
         return candidateRepo.save(candidateData);
@@ -50,12 +44,11 @@ public class CandidateService implements ItfCandidateService {
     @Override
     public Candidate editCandidate(Long codCandidate, Candidate CandidateData) {
         Candidate CandidateExisting = searchCandidate(codCandidate);
-        if(CandidateExisting==null){
-        return null;
+        if (CandidateExisting == null) {
+            return null;
         }
         boolean valido = this.validateDataCandidate(CandidateData);
-        if (valido==false)
-        {
+        if (valido == false) {
             return null;
         }
         CandidateExisting.setName(CandidateData.getName());
@@ -70,38 +63,31 @@ public class CandidateService implements ItfCandidateService {
     public boolean deleteCandidate(Long codCandidate) {
         Candidate CandidateExisting = searchCandidate(codCandidate);
 
-        if (CandidateExisting == null)
-        {
+        if (CandidateExisting == null) {
             return false;
         }
         candidateRepo.delete(CandidateExisting);
         return true;
     }
 
-    public boolean validateDataCandidate(Candidate candidateData )
-    {
-        if (candidateData.getName()==null || candidateData.getName().isBlank())
-        {
+    public boolean validateDataCandidate(Candidate candidateData) {
+        if (candidateData.getName() == null || candidateData.getName().isBlank()) {
             return false;
         }
 
-        if (candidateData.getDescription()==null || candidateData.getDescription().isBlank())
-        {
+        if (candidateData.getDescription() == null || candidateData.getDescription().isBlank()) {
             return false;
         }
 
-        if (candidateData.getImgUrl()==null || candidateData.getImgUrl().isBlank())
-        {
+        if (candidateData.getImgUrl() == null || candidateData.getImgUrl().isBlank()) {
             return false;
         }
 
-        if (candidateData.getOrderTicket()==0 || candidateData.getOrderTicket()<=0 )
-        {
+        if (candidateData.getOrderTicket() == 0 || candidateData.getOrderTicket() <= 0) {
             return false;
         }
 
-        if (candidateData.getElectionCandidate()==null || candidateData.getElectionCandidate().toString().isBlank() )
-        {
+        if (candidateData.getElectionCandidate() == null || candidateData.getElectionCandidate().toString().isBlank()) {
             return false;
         }
 

@@ -1,6 +1,5 @@
 package com.cleycer.Votacion.model;
 
-
 import jakarta.persistence.*;
 
 @Entity
@@ -11,15 +10,17 @@ public class Candidate {
     private Long codCandidate;
     private String name;
     private String description;
-    private int orderTicket;
+    private Integer orderTicket;
     private String imgUrl;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cod_election")
-    private Election electionCandidate ;
+    private Election electionCandidate;
 
-    public Candidate(){}
+    public Candidate() {
+    }
 
-    public Candidate(Long codCandidate, String name, String description, int orderTicket, String imgUrl, Election electionCandidate) {
+    public Candidate(Long codCandidate, String name, String description, int orderTicket, String imgUrl,
+            Election electionCandidate) {
 
         this.codCandidate = codCandidate;
         this.name = name;
