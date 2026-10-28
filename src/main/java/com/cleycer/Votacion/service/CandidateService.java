@@ -1,5 +1,6 @@
 package com.cleycer.Votacion.service;
 
+import com.cleycer.Votacion.dto.CandidateRequestDto;
 import com.cleycer.Votacion.model.Candidate;
 import com.cleycer.Votacion.model.Election;
 import com.cleycer.Votacion.repository.ItfCandidateRepository;
@@ -31,8 +32,17 @@ public class CandidateService implements ItfCandidateService {
 
     @Override
     public Candidate createCandidate(Candidate candidateData) {
-        Long codElectionCandidate = candidateData.getElectionCandidate();
-        Election codeElection = ElectionRepo.getReferenceById(codElectionCandidate);
+        if (candidateData == null) {
+            return null;
+        }
+        Election electionCandidateRef = candidateData.getElectionCandidate();
+        if (electionCandidateRef == null || electionCandidateRef.getCodElection() == null) {
+            return null;
+        }
+        Election codeElection = ElectionRepo.findById(electionCandidateRef.getCodElection()).orElse(null);
+        if (codeElection == null) {
+            return null;
+        }
         candidateData.setElectionCandidate(codeElection);
         boolean valido = this.validateDataCandidate(candidateData);
         if (valido == false) {
@@ -55,6 +65,71 @@ public class CandidateService implements ItfCandidateService {
         CandidateExisting.setImgUrl(CandidateData.getImgUrl());
         CandidateExisting.setDescription(CandidateData.getDescription());
         CandidateExisting.setOrderTicket(CandidateData.getOrderTicket());
+
+        return candidateRepo.save(CandidateExisting);
+    }
+
+    @Override
+    public Candidate createCandidate(CandidateRequestDto candidateRequestDto) {
+        if (candidateRequestDto == null) {
+            return null;
+        }
+        if (candidateRequestDto.getCodElection() == null) {
+            return null;
+        }
+        Election codeElection = ElectionRepo.findById(candidateRequestDto.getCodElection()).orElse(null);
+        if (codeElection == null) {
+            return null;
+        }
+
+        Candidate candidate = new Candidate();
+        candidate.setName(candidateRequestDto.getName());
+        candidate.setDescription(candidateRequestDto.getDescription());
+        candidate.setOrderTicket(candidateRequestDto.getOrderTicket());
+        candidate.setImgUrl(candidateRequestDto.getImgUrl());
+        candidate.setElectionCandidate(codeElection);
+
+        boolean valido = this.validateDataCandidate(candidate);
+        if (valido == false) {
+            return null;
+        }
+        return candidateRepo.save(candidate);
+    }
+
+    @Override
+    public Candidate editCandidate(Long codCandidate, CandidateRequestDto candidateRequestDto) {
+        if (candidateRequestDto == null) {
+            return null;
+        }
+        Candidate CandidateExisting = searchCandidate(codCandidate);
+        if (CandidateExisting == null) {
+            return null;
+        }
+        if (candidateRequestDto.getCodElection() == null) {
+            return null;
+        }
+        Election codeElection = ElectionRepo.findById(candidateRequestDto.getCodElection()).orElse(null);
+        if (codeElection == null) {
+            return null;
+        }
+
+        Candidate candidate = new Candidate();
+        candidate.setName(candidateRequestDto.getName());
+        candidate.setDescription(candidateRequestDto.getDescription());
+        candidate.setOrderTicket(candidateRequestDto.getOrderTicket());
+        candidate.setImgUrl(candidateRequestDto.getImgUrl());
+        candidate.setElectionCandidate(codeElection);
+
+        boolean valido = this.validateDataCandidate(candidate);
+        if (valido == false) {
+            return null;
+        }
+
+        CandidateExisting.setName(candidate.getName());
+        CandidateExisting.setImgUrl(candidate.getImgUrl());
+        CandidateExisting.setDescription(candidate.getDescription());
+        CandidateExisting.setOrderTicket(candidate.getOrderTicket());
+        CandidateExisting.setElectionCandidate(codeElection);
 
         return candidateRepo.save(CandidateExisting);
     }
@@ -83,11 +158,11 @@ public class CandidateService implements ItfCandidateService {
             return false;
         }
 
-        if (candidateData.getOrderTicket() == 0 || candidateData.getOrderTicket() <= 0) {
+        if (candidateData.getOrderTicket() == null || candidateData.getOrderTicket() <= 0) {
             return false;
         }
 
-        if (candidateData.getElectionCandidate() == null || candidateData.getElectionCandidate().toString().isBlank()) {
+        if (candidateData.getElectionCandidate() == null || candidateData.getElectionCandidate().getCodElection() == null) {
             return false;
         }
 

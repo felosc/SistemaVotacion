@@ -1,7 +1,9 @@
 package com.cleycer.Votacion.controller;
 
+import com.cleycer.Votacion.dto.VoteRequestDto;
 import com.cleycer.Votacion.model.Votes;
 import com.cleycer.Votacion.service.ItfVotesService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,12 +35,19 @@ public class VoteRestController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createVote(@RequestBody Votes voteData) {
+    public ResponseEntity<?> createVote(@Valid @RequestBody VoteRequestDto voteRequestDto) {
+        Votes newVote = votesService.createVote(voteRequestDto);
+        if (newVote == null) {
+            return ResponseEntity.badRequest().body("Error creating vote. Verify user, candidate, election status, dates or if user already voted in this election");
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(newVote);
+    }
+
+    @PostMapping("/entity")
+    public ResponseEntity<?> createVoteEntity(@RequestBody Votes voteData) {
         Votes newVote = votesService.createVote(voteData);
         if (newVote == null) {
-            return ResponseEntity.badRequest().body("Error Creating new Vote, verify the data send data \n"
-                    + voteData.getUserVote() + " " +
-                    voteData.getCandidateVote());
+            return ResponseEntity.badRequest().body("Error creating vote. Verify user, candidate, election status, dates or if user already voted in this election");
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(newVote);
     }

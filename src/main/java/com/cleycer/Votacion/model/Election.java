@@ -1,9 +1,9 @@
 package com.cleycer.Votacion.model;
 
 import jakarta.persistence.*;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class Election {
@@ -16,14 +16,14 @@ public class Election {
     private LocalDate startDate;
     private LocalDate endDate;
     private String state;
-    private LocalDate timestamp;
+    private LocalDateTime timestamp;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cod_user")
-    private Users userCreate ;
+    private Users userCreate;
 
     public Election(){}
 
-    public Election(Long codElection, String title, String description, LocalDate startDate, LocalDate endDate, String state, LocalDate timestamp, Users userCreate) {
+    public Election(Long codElection, String title, String description, LocalDate startDate, LocalDate endDate, String state, LocalDateTime timestamp, Users userCreate) {
         this.codElection = codElection;
         this.title = title;
         this.description = description;
@@ -82,12 +82,19 @@ public class Election {
         this.state = state;
     }
 
-    public LocalDate getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(LocalDate timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (this.timestamp == null) {
+            this.timestamp = LocalDateTime.now();
+        }
     }
 
     public Long getUserCreate() {

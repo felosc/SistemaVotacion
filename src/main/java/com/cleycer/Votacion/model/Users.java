@@ -3,6 +3,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class Users {
@@ -13,12 +16,12 @@ public class Users {
     private String email;
     private String password;
     private String rol;
-    private String timestamp;
+    private LocalDateTime timestamp;
 
     public Users() {
     }
 
-    public Users(Long codUser, String username, String email, String password, String rol, String timestamp) {
+    public Users(Long codUser, String username, String email, String password, String rol, LocalDateTime timestamp) {
         this.codUser = codUser;
         this.username = username;
         this.email = email;
@@ -67,12 +70,19 @@ public class Users {
         this.rol = rol;
     }
 
-    public String getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (this.timestamp == null) {
+            this.timestamp = LocalDateTime.now();
+        }
     }
 }
 

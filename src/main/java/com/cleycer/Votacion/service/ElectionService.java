@@ -1,5 +1,6 @@
 package com.cleycer.Votacion.service;
 
+import com.cleycer.Votacion.dto.ElectionRequestDto;
 import com.cleycer.Votacion.model.Election;
 import com.cleycer.Votacion.model.Users;
 import com.cleycer.Votacion.repository.ItfElectionRepository;
@@ -32,7 +33,13 @@ public class ElectionService implements ItfElectionService {
     public Election createElection(Election ElectionData) {
 
         Long codUserCreate = ElectionData.getUserCreate();
+        if (codUserCreate == null) {
+            return null;
+        }
         Users userCreateElection = userRepo.searchUser(codUserCreate);
+        if (userCreateElection == null) {
+            return null;
+        }
         ElectionData.setUserCreate(userCreateElection);
         boolean valido = this.validateDataElection(ElectionData);
         if (valido == false) {
@@ -40,6 +47,34 @@ public class ElectionService implements ItfElectionService {
         }
         return ElectionRepo.save(ElectionData);
 
+    }
+
+    @Override
+    public Election createElection(ElectionRequestDto electionRequestDto) {
+        if (electionRequestDto == null) {
+            return null;
+        }
+        if (electionRequestDto.getUserCreate() == null) {
+            return null;
+        }
+        Users userCreateElection = userRepo.searchUser(electionRequestDto.getUserCreate());
+        if (userCreateElection == null) {
+            return null;
+        }
+
+        Election election = new Election();
+        election.setTitle(electionRequestDto.getTitle());
+        election.setDescription(electionRequestDto.getDescription());
+        election.setStartDate(electionRequestDto.getStartDate());
+        election.setEndDate(electionRequestDto.getEndDate());
+        election.setState(electionRequestDto.getState());
+        election.setUserCreate(userCreateElection);
+
+        boolean valido = this.validateDataElection(election);
+        if (valido == false) {
+            return null;
+        }
+        return ElectionRepo.save(election);
     }
 
     @Override
@@ -59,6 +94,46 @@ public class ElectionService implements ItfElectionService {
         ElectionExisting.setEndDate(ElectionData.getEndDate());
         ElectionExisting.setState(ElectionData.getState());
         ElectionExisting.setTimestamp(ElectionData.getTimestamp());
+
+        return ElectionRepo.save(ElectionExisting);
+    }
+
+    @Override
+    public Election editElection(Long codElection, ElectionRequestDto electionRequestDto) {
+        if (electionRequestDto == null) {
+            return null;
+        }
+        Election ElectionExisting = searchElection(codElection);
+        if (ElectionExisting == null) {
+            return null;
+        }
+        if (electionRequestDto.getUserCreate() == null) {
+            return null;
+        }
+        Users userCreateElection = userRepo.searchUser(electionRequestDto.getUserCreate());
+        if (userCreateElection == null) {
+            return null;
+        }
+
+        Election election = new Election();
+        election.setTitle(electionRequestDto.getTitle());
+        election.setDescription(electionRequestDto.getDescription());
+        election.setStartDate(electionRequestDto.getStartDate());
+        election.setEndDate(electionRequestDto.getEndDate());
+        election.setState(electionRequestDto.getState());
+        election.setUserCreate(userCreateElection);
+
+        boolean valido = this.validateDataElection(election);
+        if (valido == false) {
+            return null;
+        }
+
+        ElectionExisting.setTitle(election.getTitle());
+        ElectionExisting.setDescription(election.getDescription());
+        ElectionExisting.setStartDate(election.getStartDate());
+        ElectionExisting.setEndDate(election.getEndDate());
+        ElectionExisting.setState(election.getState());
+        ElectionExisting.setUserCreate(userCreateElection);
 
         return ElectionRepo.save(ElectionExisting);
     }
@@ -95,13 +170,15 @@ public class ElectionService implements ItfElectionService {
             return false;
         }
 
-        if (ElecionData.getUserCreate() == null || ElecionData.getUserCreate().toString().isBlank()) {
+        if (ElecionData.getUserCreate() == null) {
             return false;
         }
 
-        if (ElecionData.getTimestamp() == null) {
+        if (ElecionData.getStartDate() != null && ElecionData.getEndDate() != null
+                && ElecionData.getEndDate().isBefore(ElecionData.getStartDate())) {
             return false;
         }
+
         return true;
     }
 

@@ -1,30 +1,36 @@
 package com.cleycer.Votacion.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"cod_user", "cod_election"}))
 public class Votes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codVote;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cod_user")
     private Users userVote;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cod_election")
+    private Election electionVote;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cod_candidate")
     private Candidate candidateVote;
-    private LocalDate timestamp;
+    private LocalDateTime timestamp;
 
     public Votes() {
     }
 
-    public Votes(Long codVote, Users userVote, Candidate candidateVote, LocalDate timestamp) {
+    public Votes(Long codVote, Users userVote, Candidate candidateVote, Election electionVote, LocalDateTime timestamp) {
         this.codVote = codVote;
         this.userVote = userVote;
         this.candidateVote = candidateVote;
+        this.electionVote = electionVote;
         this.timestamp = timestamp;
     }
 
@@ -36,27 +42,35 @@ public class Votes {
         this.codVote = codVote;
     }
 
-    public Long getUserVote() {
-        return userVote.getCodUser();
+    public Users getUserVote() {
+        return userVote;
     }
 
     public void setUserVote(Users userVote) {
         this.userVote = userVote;
     }
 
-    public Long getCandidateVote() {
-        return candidateVote.getCodCandidate();
+    public Candidate getCandidateVote() {
+        return candidateVote;
     }
 
     public void setCandidateVote(Candidate candidateVote) {
         this.candidateVote = candidateVote;
     }
 
-    public LocalDate getTimestamp() {
+    public Election getElectionVote() {
+        return electionVote;
+    }
+
+    public void setElectionVote(Election electionVote) {
+        this.electionVote = electionVote;
+    }
+
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(LocalDate timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 

@@ -214,3 +214,13 @@ body {
     stroke-linecap: round;
     stroke-linejoin: round;
 }
+
+#form_eliminar {
+    background: none;
+    border: none;
+    color: red;
+}
+
+#form_eliminar:hover {
+    cursor: pointer;
+}
