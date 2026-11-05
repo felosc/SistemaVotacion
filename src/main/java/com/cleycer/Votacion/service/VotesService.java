@@ -34,22 +34,31 @@ public class VotesService implements ItfVotesService {
     }
 
     @Override
-    public List<Votes> getVotes() {
-        return votesRepo.findAll();
+    public List<com.cleycer.Votacion.dto.VoteResponseDto> getVotes() {
+        return votesRepo.findAll().stream().map(com.cleycer.Votacion.mapper.VoteMapper::toDto)
+                .collect(java.util.stream.Collectors.toList());
     }
 
     @Override
-    public List<Votes> getVotesUser(Long codUser) {
-        return votesRepo.findByUserVote_CodUser(codUser);
+    public List<com.cleycer.Votacion.dto.VoteResponseDto> getVotesUser(Long codUser) {
+        return votesRepo.findByUserVote_CodUser(codUser).stream().map(com.cleycer.Votacion.mapper.VoteMapper::toDto)
+                .collect(java.util.stream.Collectors.toList());
     }
 
     @Override
-    public List<Votes> getVotesCandidate(Long codCandidate) {
+    public List<com.cleycer.Votacion.dto.VoteResponseDto> getVotesCandidate(Long codCandidate) {
         List<Votes> allVotes = votesRepo.findAll();
         return allVotes.stream()
                 .filter(vote -> vote.getCandidateVote() != null
                         && vote.getCandidateVote().getCodCandidate().equals(codCandidate))
+                .map(com.cleycer.Votacion.mapper.VoteMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public com.cleycer.Votacion.dto.VoteResponseDto searchVoteDto(Long codVote) {
+        Votes vote = votesRepo.findById(codVote).orElse(null);
+        return com.cleycer.Votacion.mapper.VoteMapper.toDto(vote);
     }
 
     @Override
@@ -117,7 +126,7 @@ public class VotesService implements ItfVotesService {
     }
 
     @Override
-    public Votes createVote(VoteRequestDto voteRequestDto) {
+    public com.cleycer.Votacion.dto.VoteResponseDto createVote(VoteRequestDto voteRequestDto) {
         if (voteRequestDto == null) {
             return null;
         }
@@ -166,7 +175,8 @@ public class VotesService implements ItfVotesService {
         vote.setElectionVote(verifyElection);
         vote.setTimestamp(LocalDateTime.now());
 
-        return votesRepo.save(vote);
+        Votes saved = votesRepo.save(vote);
+        return com.cleycer.Votacion.mapper.VoteMapper.toDto(saved);
     }
 
     @Override

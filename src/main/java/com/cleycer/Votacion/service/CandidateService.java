@@ -21,8 +21,15 @@ public class CandidateService implements ItfCandidateService {
     }
 
     @Override
-    public List<Candidate> getCandidates() {
-        return candidateRepo.findAll();
+    public List<com.cleycer.Votacion.dto.CandidateResponseDto> getCandidates() {
+        return candidateRepo.findAll().stream().map(com.cleycer.Votacion.mapper.CandidateMapper::toDto)
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    @Override
+    public com.cleycer.Votacion.dto.CandidateResponseDto searchCandidateDto(Long codCandidate) {
+        Candidate candidate = candidateRepo.findById(codCandidate).orElse(null);
+        return com.cleycer.Votacion.mapper.CandidateMapper.toDto(candidate);
     }
 
     @Override
@@ -70,7 +77,7 @@ public class CandidateService implements ItfCandidateService {
     }
 
     @Override
-    public Candidate createCandidate(CandidateRequestDto candidateRequestDto) {
+    public com.cleycer.Votacion.dto.CandidateResponseDto createCandidate(CandidateRequestDto candidateRequestDto) {
         if (candidateRequestDto == null) {
             return null;
         }
@@ -93,11 +100,13 @@ public class CandidateService implements ItfCandidateService {
         if (valido == false) {
             return null;
         }
-        return candidateRepo.save(candidate);
+        Candidate saved = candidateRepo.save(candidate);
+        return com.cleycer.Votacion.mapper.CandidateMapper.toDto(saved);
     }
 
     @Override
-    public Candidate editCandidate(Long codCandidate, CandidateRequestDto candidateRequestDto) {
+    public com.cleycer.Votacion.dto.CandidateResponseDto editCandidate(Long codCandidate,
+            CandidateRequestDto candidateRequestDto) {
         if (candidateRequestDto == null) {
             return null;
         }
@@ -131,7 +140,8 @@ public class CandidateService implements ItfCandidateService {
         CandidateExisting.setOrderTicket(candidate.getOrderTicket());
         CandidateExisting.setElectionCandidate(codeElection);
 
-        return candidateRepo.save(CandidateExisting);
+        Candidate saved = candidateRepo.save(CandidateExisting);
+        return com.cleycer.Votacion.mapper.CandidateMapper.toDto(saved);
     }
 
     @Override

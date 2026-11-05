@@ -1,22 +1,24 @@
 package com.cleycer.Votacion.service;
 
 import com.cleycer.Votacion.dto.VoteRequestDto;
+import com.cleycer.Votacion.dto.VoteResponseDto;
 import com.cleycer.Votacion.model.Votes;
 import java.util.List;
 
 public interface ItfVotesService {
 
-    List<Votes> getVotes();
+    List<VoteResponseDto> getVotes();
 
-    List<Votes> getVotesUser(Long codUser);
+    List<VoteResponseDto> getVotesUser(Long codUser);
 
-    List<Votes> getVotesCandidate(Long codCandidate);
+    List<VoteResponseDto> getVotesCandidate(Long codCandidate);
 
+    VoteResponseDto searchVoteDto(Long codVote);
     Votes searchVote(Long codVote);
 
     Votes createVote(Votes voteData);
 
-    Votes createVote(VoteRequestDto voteRequestDto);
+    VoteResponseDto createVote(VoteRequestDto voteRequestDto);
 
     Votes editVote(Long codVote, Votes voteData);
 

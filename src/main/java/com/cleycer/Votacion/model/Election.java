@@ -97,7 +97,14 @@ public class Election {
         }
     }
 
+    public Users getUserCreateEntity() {
+        return userCreate;
+    }
+
     public Long getUserCreate() {
+        if (userCreate == null) {
+            return null;
+        }
         return userCreate.getCodUser();
     }
 

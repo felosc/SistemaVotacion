@@ -17,8 +17,15 @@ public class UsersService implements ItfUsersService {
     }
 
     @Override
-    public List<Users> getUsers() {
-        return userRepo.findAll();
+    public List<com.cleycer.Votacion.dto.UserResponseDto> getUsers() {
+        return userRepo.findAll().stream().map(com.cleycer.Votacion.mapper.UserMapper::toDto)
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    @Override
+    public com.cleycer.Votacion.dto.UserResponseDto searchUserDto(Long codUser) {
+        Users user = userRepo.findById(codUser).orElse(null);
+        return com.cleycer.Votacion.mapper.UserMapper.toDto(user);
     }
 
     @Override
@@ -64,7 +71,7 @@ public class UsersService implements ItfUsersService {
     }
 
     @Override
-    public Users createUser(UserRequestDto userRequestDto) {
+    public com.cleycer.Votacion.dto.UserResponseDto createUser(UserRequestDto userRequestDto) {
         if (userRequestDto == null) {
             return null;
         }
@@ -80,11 +87,12 @@ public class UsersService implements ItfUsersService {
             return null;
         }
 
-        return userRepo.save(user);
+        Users saved = userRepo.save(user);
+        return com.cleycer.Votacion.mapper.UserMapper.toDto(saved);
     }
 
     @Override
-    public Users editUser(Long codUsers, UserRequestDto userRequestDto) {
+    public com.cleycer.Votacion.dto.UserResponseDto editUser(Long codUsers, UserRequestDto userRequestDto) {
         if (userRequestDto == null) {
             return null;
         }
@@ -109,7 +117,8 @@ public class UsersService implements ItfUsersService {
         userExisting.setPassword(user.getPassword());
         userExisting.setRol(user.getRol());
 
-        return userRepo.save(userExisting);
+        Users saved = userRepo.save(userExisting);
+        return com.cleycer.Votacion.mapper.UserMapper.toDto(saved);
     }
 
     @Override

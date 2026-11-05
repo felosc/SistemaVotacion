@@ -21,7 +21,7 @@ public class UserRestController {
 
     //traer todos los usuarios
     @GetMapping
-    public List<Users> getUsesrs() {
+    public List<com.cleycer.Votacion.dto.UserResponseDto> getUsesrs() {
         return UserService.getUsers();
     }
 
@@ -29,7 +29,7 @@ public class UserRestController {
     @GetMapping("/{codUser}")
     //el "?" indica que la respuesta puede ser el usuario o un null se llama  "opcional"
     public ResponseEntity<?> searchUser(@PathVariable Long codUser) {
-        Users user = UserService.searchUser(codUser);
+        com.cleycer.Votacion.dto.UserResponseDto user = UserService.searchUserDto(codUser);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not Found");
         }
@@ -39,7 +39,7 @@ public class UserRestController {
     //crear usuario
     @PostMapping
     public ResponseEntity<?> createUser(@Valid @RequestBody UserRequestDto userRequestDto) {
-        Users newUser = UserService.createUser(userRequestDto);
+        com.cleycer.Votacion.dto.UserResponseDto newUser = UserService.createUser(userRequestDto);
 
         if (newUser == null) {
             return ResponseEntity.badRequest().body("the data no are valid");
@@ -60,7 +60,7 @@ public class UserRestController {
     //editar usuario
     @PutMapping("/{codUser}")
     public ResponseEntity<?> editUser(@PathVariable Long codUser, @Valid @RequestBody UserRequestDto userRequestDto) {
-        Users editUser = UserService.editUser(codUser, userRequestDto);
+        com.cleycer.Votacion.dto.UserResponseDto editUser = UserService.editUser(codUser, userRequestDto);
         if (editUser == null) {
             return ResponseEntity.badRequest().body("Error to edit User");
         }

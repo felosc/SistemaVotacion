@@ -21,13 +21,13 @@ public class VoteRestController {
     }
 
     @GetMapping
-    public List<Votes> getUVotes() {
+    public List<com.cleycer.Votacion.dto.VoteResponseDto> getUVotes() {
         return votesService.getVotes();
     }
 
     @GetMapping("/{codVote}")
     public ResponseEntity<?> searchVote(@PathVariable Long codVote) {
-        Votes vote = votesService.searchVote(codVote);
+        com.cleycer.Votacion.dto.VoteResponseDto vote = votesService.searchVoteDto(codVote);
         if (vote == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vote not Found");
         }
@@ -36,7 +36,7 @@ public class VoteRestController {
 
     @PostMapping
     public ResponseEntity<?> createVote(@Valid @RequestBody VoteRequestDto voteRequestDto) {
-        Votes newVote = votesService.createVote(voteRequestDto);
+        com.cleycer.Votacion.dto.VoteResponseDto newVote = votesService.createVote(voteRequestDto);
         if (newVote == null) {
             return ResponseEntity.badRequest().body("Error creating vote. Verify user, candidate, election status, dates or if user already voted in this election");
         }

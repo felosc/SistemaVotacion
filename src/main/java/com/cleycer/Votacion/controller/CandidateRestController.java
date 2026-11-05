@@ -21,13 +21,13 @@ public class CandidateRestController {
     }
 
     @GetMapping
-    public List<Candidate> getCandidates() {
+    public List<com.cleycer.Votacion.dto.CandidateResponseDto> getCandidates() {
         return CandidateService.getCandidates();
     }
 
     @GetMapping("/{codCandidate}")
     public ResponseEntity<?> searchCandidate(@PathVariable Long codCandidate) {
-        Candidate candidate = CandidateService.searchCandidate(codCandidate);
+        com.cleycer.Votacion.dto.CandidateResponseDto candidate = CandidateService.searchCandidateDto(codCandidate);
         if (candidate == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Candidate not Found");
         }
@@ -36,7 +36,7 @@ public class CandidateRestController {
 
     @PostMapping
     public ResponseEntity<?> createCandidate(@Valid @RequestBody CandidateRequestDto candidateRequestDto) {
-        Candidate newCandidate = CandidateService.createCandidate(candidateRequestDto);
+        com.cleycer.Votacion.dto.CandidateResponseDto newCandidate = CandidateService.createCandidate(candidateRequestDto);
         if (newCandidate == null) {
             return ResponseEntity.badRequest().body("Error Creating new Candidate, verify the data send data");
         }
@@ -55,7 +55,8 @@ public class CandidateRestController {
     @PutMapping("/{codCandidate}")
     public ResponseEntity<?> editCandidate(@PathVariable Long codCandidate,
             @Valid @RequestBody CandidateRequestDto candidateRequestDto) {
-        Candidate editCandidate = CandidateService.editCandidate(codCandidate, candidateRequestDto);
+        com.cleycer.Votacion.dto.CandidateResponseDto editCandidate = CandidateService.editCandidate(codCandidate,
+                candidateRequestDto);
         if (editCandidate == null) {
             return ResponseEntity.badRequest().body("Error editing this Candidate, verify the data send data");
         }

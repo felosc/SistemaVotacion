@@ -20,8 +20,15 @@ public class ElectionService implements ItfElectionService {
     }
 
     @Override
-    public List<Election> getElections() {
-        return ElectionRepo.findAll();
+    public List<com.cleycer.Votacion.dto.ElectionResponseDto> getElections() {
+        return ElectionRepo.findAll().stream().map(com.cleycer.Votacion.mapper.ElectionMapper::toDto)
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    @Override
+    public com.cleycer.Votacion.dto.ElectionResponseDto searchElectionDto(Long codElection) {
+        Election election = ElectionRepo.findById(codElection).orElse(null);
+        return com.cleycer.Votacion.mapper.ElectionMapper.toDto(election);
     }
 
     @Override
@@ -50,7 +57,7 @@ public class ElectionService implements ItfElectionService {
     }
 
     @Override
-    public Election createElection(ElectionRequestDto electionRequestDto) {
+    public com.cleycer.Votacion.dto.ElectionResponseDto createElection(ElectionRequestDto electionRequestDto) {
         if (electionRequestDto == null) {
             return null;
         }
@@ -74,7 +81,8 @@ public class ElectionService implements ItfElectionService {
         if (valido == false) {
             return null;
         }
-        return ElectionRepo.save(election);
+        Election saved = ElectionRepo.save(election);
+        return com.cleycer.Votacion.mapper.ElectionMapper.toDto(saved);
     }
 
     @Override
@@ -99,7 +107,7 @@ public class ElectionService implements ItfElectionService {
     }
 
     @Override
-    public Election editElection(Long codElection, ElectionRequestDto electionRequestDto) {
+    public com.cleycer.Votacion.dto.ElectionResponseDto editElection(Long codElection, ElectionRequestDto electionRequestDto) {
         if (electionRequestDto == null) {
             return null;
         }
@@ -135,7 +143,8 @@ public class ElectionService implements ItfElectionService {
         ElectionExisting.setState(election.getState());
         ElectionExisting.setUserCreate(userCreateElection);
 
-        return ElectionRepo.save(ElectionExisting);
+        Election saved = ElectionRepo.save(ElectionExisting);
+        return com.cleycer.Votacion.mapper.ElectionMapper.toDto(saved);
     }
 
     @Override

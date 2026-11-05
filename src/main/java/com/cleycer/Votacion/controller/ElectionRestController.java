@@ -20,13 +20,13 @@ public class ElectionRestController {
     }
 
     @GetMapping
-    public List<Election> getElections() {
+    public List<com.cleycer.Votacion.dto.ElectionResponseDto> getElections() {
         return ElectionService.getElections();
     }
 
     @GetMapping("/{codElection}")
     public ResponseEntity<?> searchElection(@PathVariable Long codElection) {
-        Election election = ElectionService.searchElection(codElection);
+        com.cleycer.Votacion.dto.ElectionResponseDto election = ElectionService.searchElectionDto(codElection);
         if (election == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Election not Found");
         }
@@ -35,7 +35,7 @@ public class ElectionRestController {
 
     @PostMapping
     public ResponseEntity<?> createElection(@Valid @RequestBody ElectionRequestDto electionRequestDto) {
-        Election newElection = ElectionService.createElection(electionRequestDto);
+        com.cleycer.Votacion.dto.ElectionResponseDto newElection = ElectionService.createElection(electionRequestDto);
         if (newElection == null) {
             return ResponseEntity.badRequest().body("Error Creating new Election, verify the data send data");
         }
@@ -54,7 +54,8 @@ public class ElectionRestController {
     @PutMapping("/{codElection}")
     public ResponseEntity<?> editElection(@PathVariable Long codElection,
             @Valid @RequestBody ElectionRequestDto electionRequestDto) {
-        Election editElection = ElectionService.editElection(codElection, electionRequestDto);
+        com.cleycer.Votacion.dto.ElectionResponseDto editElection = ElectionService.editElection(codElection,
+                electionRequestDto);
         if (editElection == null) {
             return ResponseEntity.badRequest().body("Error Editing this Election");
         }
